@@ -1,14 +1,11 @@
 ;******************************************************************************
-; $Id: main.asm,v 1.1 2004/02/18 15:00:15 dfd Exp dfd $
+; $Id$
 ;
 ; Main source file for DRVTEST.COM
 ;
 ; ChangeLog
 ; 
-; $Log: main.asm,v $
-; Revision 1.1  2004/02/18 15:00:15  dfd
-; Initial revision
-;
+; $Log$
 ;
 ;******************************************************************************
 
@@ -283,6 +280,17 @@ do_write:
    ret
 
 .continue:
+   cmp ecx, 0				; Check remainder
+   jz .dont_know			
+   sub ebx, 1				; If not zero, subtract 1 from 
+   sbb ecx, 0				;   block number
+   jmp .final_answer
+.dont_know
+   cmp ebx, 0				; If zero use div answer as block count
+   jz .final_answer
+   sub ebx, 1				; Otherwise, substract 1 from block
+   sbb ecx, 0
+.final_answer
    mov [dap.abs_sect_start_high], ecx
    mov [dap.abs_sect_start_low], ebx
    jmp .do_it

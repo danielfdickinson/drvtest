@@ -7,12 +7,6 @@ section .data
 ;--------------------------
 ; Pre-initialized variables
 ;--------------------------
-cur_sector:
-cur_sector_low		TIMES 4 db 0
-cur_sector_high		TIMES 4 db 0
-next_sector:
-next_sector_low		TIMES 4 db 0
-next_sector_high	TIMES 4 db 0
 cur_row			db 0
 cur_col			db 0
 cur_value		db 0
@@ -20,11 +14,6 @@ cur_value		db 0
 ;------------------
 ; String constants
 ;------------------
-msg_here1			db 'Here1!', 0
-msg_here2			db 'Here2!', 0
-msg_here3			db 'Here3!', 0
-msg_here4			db 'Here4!', 0
-
 msg_param_get_err_start		db 'Error getting disk parameters: ',0
 msg_param_display_start		db 'Drive has ', 0
 msg_param_display_continue	db ' sectors with ', 0
