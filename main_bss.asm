@@ -7,8 +7,8 @@ section .bss
 ;----------
 ; Variables
 ;----------
-out_seg    		resw 1
-in_seg	  		resw 1
+io_seg    			resw 1	; Address of block for i/o buffer
+cur_sect_to_transfer		resw 1 	; Current # sectors per write
 
 ;-------------------
 ; One-off structures
@@ -46,7 +46,7 @@ dpt
    .heads			resd 1
    .sectors			resd 1
    .total_sectors
-	.total_sectors_low 	resd 1
+   .total_sectors_low 		resd 1
    .total_sectors_high 		resd 1
    .byte_count			resw 1
 dpt_v1_size EQU $-dpt

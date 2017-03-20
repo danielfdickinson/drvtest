@@ -3,6 +3,9 @@
 ;
 ;******************************************************************************
 
+%ifndef __DOS_ERROR
+%define __DOS_ERROR
+
 segment .data
 
 dos_err_ok			db 'Operation completed successfully.', 0
@@ -93,3 +96,5 @@ get_dos_err_code_string:
       mov ax, [bx]
       pop bx
       ret
+
+%endif ; __DOS_ERROR

@@ -1,0 +1,116 @@
+;******************************************************************************
+; $Id$
+;
+; Miscellaneous Macros
+;
+; Supplies the following macros:
+;	m_find_reg_type /register/	Sets m_reg_type and m_reg_size
+; 
+; ChangeLog
+; 
+; $Log$
+;
+;******************************************************************************
+
+;------------------------------------
+; Determine type and size of register
+;
+; Returns: 	m_reg_type (general or segment)
+;		m_reg_size 8, 16, or 32
+;
+%ifnmacro m_find_reg_type	1		; size and type
+	%macro m_find_reg_type 1
+		%ifidni %1, al
+			%define m_reg_type general
+			%define m_reg_size 8
+		%elifidni %1, ah
+			%define m_reg_type general
+			%define m_reg_size 8
+		%elifidni %1, ax			
+			%define m_reg_type general
+			%define m_reg_size 16
+		%elifidni %1, eax
+			%define m_reg_type general
+			%define m_reg_size 32
+		%elifidni %1, bl
+			%define m_reg_type general
+			%define m_reg_size 8
+		%elifidni %1, bh
+			%define m_reg_type general
+			%define m_reg_size 8
+		%elifidni %1, bx			
+			%define m_reg_type general
+			%define m_reg_size 16
+		%elifidni %1, ebx
+			%define m_reg_type general
+			%define m_reg_size 32
+		%elifidni %1, cl
+			%define m_reg_type general
+			%define m_reg_size 8
+		%elifidni %1, ch
+			%define m_reg_type general
+			%define m_reg_size 8
+		%elifidni %1, cx			
+			%define m_reg_type general
+			%define m_reg_size 16
+		%elifidni %1, ecx
+			%define m_reg_type general
+			%define m_reg_size 32
+		%elifidni %1, dl
+			%define m_reg_type general
+			%define m_reg_size 8
+		%elifidni %1, dh
+			%define m_reg_type general
+			%define m_reg_size 8
+		%elifidni %1, dx			
+			%define m_reg_type general
+			%define m_reg_size 16
+		%elifidni %1, edx
+			%define m_reg_type general
+			%define m_reg_size 32
+		%elifidni %1, si			
+			%define m_reg_type general
+			%define m_reg_size 16
+		%elifidni %1, esi
+			%define m_reg_type general
+			%define m_reg_size 32
+		%elifidni %1, di			
+			%define m_reg_type general
+			%define m_reg_size 16
+		%elifidni %1, edi
+			%define m_reg_type general
+			%define m_reg_size 32
+		%elifidni %1, sp
+			%define m_reg_type general
+			%define m_reg_size 16
+		%elifidni %1, esp
+			%define m_reg_type general
+			%define m_reg_size 32
+		%elifidni %1, bp			
+			%define m_reg_type general
+			%define m_reg_size 16
+		%elifidni %1, ebp
+			%define m_reg_type general
+			%define m_reg_size 32
+		%elifidni %1, cs
+			%define m_reg_type segment
+			%define m_reg_size 16		
+		%elifidni %1, ds
+			%define m_reg_type segment
+			%define m_reg_size 16		
+		%elifidni %1, es
+			%define m_reg_type segment
+			%define m_reg_size 16		
+		%elifidni %1, ss
+			%define m_reg_type segment
+			%define m_reg_size 16		
+		%elifidni %1, fs
+			%define m_reg_type segment
+			%define m_reg_size 16		
+		%elifidni %1, gs
+			%define m_reg_type segment
+			%define m_reg_size 16		
+		%endif
+	%endmacro ; m_find_reg_type
+%endif
+

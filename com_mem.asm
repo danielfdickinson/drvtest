@@ -1,18 +1,51 @@
-;----------------------------------------------
-; Initialize end of available memory for a .COM
+;******************************************************************************
+; $Id$
 ;
+; Memory management for a .COM (for memory below 1MB)
+;
+; Assumes first_unalloc_byte has been initialize with first byte beyond that
+; allocated to .COM (in DOS a .COM is allocated all available memory below
+; 640k)
+;
+; Supplies the following macros:
+;    m_get_def_data_seg /register/	; Load 16-bit register /register/
+;					;   with data segment
 ; 
-init_com_alloc
-   mov ax, [02h]		; Offset 02h in PSP is seg of first byte past
-				;    memory allocated to .COM
-   mov [first_avail_byte], ax	; Store that info
-   ret				; and return
+; ChangeLog
+; 
+; $Log$
+;
+;******************************************************************************
+
+;-----------------------------------------------
+; Load 16-bit register with default data segment
+;
+%macro m_get_def_data_seg 1	; 1 parameter (register to load with default
+				;    data segment)
+
+	m_find_reg_type %1
+        %ifidn m_reg_type, general
+		%if m_reg_size == 16
+			mov %1, cs	; Default data segment = CS
+		%else
+			%error "Can't load segment into 8 or 32 bit registers"
+		%endif
+	%elifidn m_reg_type, segment
+		push ax
+		mov ax, cs		; Default data segment = CS
+		mov %1, ax		
+		pop ax
+	%else
+		%error "m_reg_type not segment or general in m_get_def_data_seg"
+	%endif
+%endmacro ; m_get_def_data_seg 1
 
 ;------------------------------
 ; Record memory usage in a .COM
 ;
 ; IN: 
 ;    BX = requested size in paragraphs
+;    DS:SI = segment of address of end of code+data+bss
 ; OUT: 
 ;    Success
 ;        Carry clear: 
@@ -23,7 +56,8 @@ init_com_alloc
 ;        BX = Segment that failed
 ;
 allocate_segment
-   mov ax, [first_avail_byte] 	; Seg of first byte not available
+   mov ax, [first_unalloc_byte]	; Seg of first byte not available
+   mov dx, end_of_bss		; Last byte of program
    sub ax, bx			; Seg - desired = allocated seg
    jc .alloc_err1   
    mov bx, cs
@@ -42,7 +76,7 @@ allocate_segment
 
 .alloc_ok
    stosw
-   mov [first_avail_byte], ax
+   mov [first_unalloc_byte], ax
    clc
 .exit
    ret
@@ -108,6 +142,9 @@ get_com_mem_error_string:
 .done
     ret
 
+;---------
+; Messages
+;---------
 section .data
 
 msg_alloc_err_no_avail	db 'Error: Not enough memory.  First avail block is', 0
@@ -117,12 +154,14 @@ msg_alloc_err_com_full_end
 msg_alloc_err_err	db 'Invalid error code.', 0
 msg_alloc_err_err_end
 
-    
+
+;--------------------------------------------------------
+; Uninitialized variables for memory management below 1MB
+;
 
 section .bss
 
 ;----------
 ; Variables
 ;----------
-first_avail_byte	resw 1	; First byte past end of .COM allocated memory
-				; (i.e. past end of available memory)
+first_unalloc_byte	resw 1	; First byte past end of .COM allocated memory
