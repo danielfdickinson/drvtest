@@ -1,0 +1,10 @@
+For kicks an ancient 8086/8088 assembler program
+for testing drives that I wrote using either
+Turbo Assembler or NASM, or something even more
+limited in terms of aid for writing code.
+for operation from a floppy drive.  Didn't have
+a rescue Linux distro at the time (dialup and
+working on ancient computers).
+
+It was written to avoid reliance on proprietary
+tools that I couldn't afford.
